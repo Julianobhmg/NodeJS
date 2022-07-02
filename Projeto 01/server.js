@@ -1,2 +1,12 @@
-<h1> JULIANO CEZAR CAETANO</h1>
-console.log("JCC - Juliano Cezar Caetano");
+const express = require("express"); 
+const app = express(); 
+ 
+const port = process.env.PORT || 3000; 
+ 
+app.get("/", function(req, res){ 
+    res.send("Juliano Cezar Caetano"); 
+}); 
+ 
+app.listen(port, () => { 
+    console.info(`Aplicação rodando em http://localhost:${port}`); 
+});
