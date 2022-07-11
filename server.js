@@ -30,7 +30,7 @@ app.use('*', function(req, res, next) {
 
 // Cria um manipulador da rota padrão 
 app.get('/', function (req, res) {
-    res.send('Hello World')    
+    res.send('CRUD HTTP - Juliano Cezar Caetano')    
 
 })
 
