@@ -16,6 +16,8 @@ const lista_produtos = {
 }
 
 app.use (express.json ())
+app.use(express.urlencoded({ extended: true }));
+
 
   // realiza log da requisição
 app.use('*', function(req, res, next) {
@@ -24,7 +26,7 @@ app.use('*', function(req, res, next) {
   console.log("req.url:", req.url)
   console.log("req.query:", req.query)
   console.log("req.path:", req.path)
-  console.log("req.body:", req.body)
+  console.log("req.body.dados:", req.body.dados)  
   next ()
 })
 
@@ -59,16 +61,16 @@ app.put('/produtos/:id', function (req, res) {
   if (idx > -1) {
       produtoAux = lista_produtos.produtos[idx];
 
-      if (req.query.descricao != null) {
-        produtoAux.descricao = req.query.descricao;
+      if (req.body.descricao != null) {
+        produtoAux.descricao = req.body.descricao;
       } 
   
-      if (req.query.valor != null ) {
-        produtoAux.valor = req.query.valor;
+      if (req.body.valor != null ) {
+        produtoAux.valor = req.body.valor;
       }
       
-      if (req.query.marca != null ) {
-        produtoAux.marca = req.query.marca;
+      if (req.body.marca != null ) {
+        produtoAux.marca = req.body.marca;
       }
 
       lista_produtos.produtos[idx] = produtoAux;
@@ -95,18 +97,20 @@ app.delete('/produtos/:id', function (req, res) {
 
 //Incluir um produto
 app.post('/produtos/', function (req, res) {    
-  let id = Number.parseInt(req.query.id)
+  var data = req.body
+
+  let id = Number.parseInt(req.body.id)
   let idx = lista_produtos.produtos.findIndex(elem => elem.id == id)
   if (idx > -1) {
     res.status (200).json ( { messsage: "Esse Produto/ID já existe." })
   } else {
-      if ((req.query.id == null) || 
-          (req.query.descricao == null) || 
-          (req.query.valor == null) || 
-          (req.query.marca == null)) {
+      if ((req.body.id == null) || 
+          (req.body.descricao == null) || 
+          (req.body.valor == null) || 
+          (req.body.marca == null)) {
           res.status (200).json ( { messsage: "Todos os campos são obigatorios." })
       } else {
-        lista_produtos.produtos.push(req.query)
+        lista_produtos.produtos.push(req.body)
         res.status (200).json ( { messsage: "Produto cadastrado com sucesso." })
     }
   }
@@ -116,4 +120,5 @@ app.post('/produtos/', function (req, res) {
 app.listen(port, function () {
     console.log('Servidor rodando na porta 3000')
 })
+
 
